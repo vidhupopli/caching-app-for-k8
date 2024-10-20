@@ -1,8 +1,10 @@
 import express from "express";
 import { Redis } from "ioredis";
+import cors from "cors";
 const serverPort = 8080;
 const app = express();
 let redis = null;
+app.use(cors({ origin: "*" }));
 app.get("/", (req, res, next) => {
     res.json({ msg: "Jai Gurudev" });
 });

@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState, useRef } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [url, setUrl] = useState("");
+  const [makeAPIRequest, setMakeAPIRequest] = useState(0);
+  const timeoutReference = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (!makeAPIRequest) return;
+
+    if (timeoutReference) {
+      clearTimeout(timeoutReference.current);
+    }
+
+    const newTimeoutRef = setTimeout(async () => {
+      try {
+        const response = await fetch(url, { method: "GET" });
+        console.log("response is -->", response);
+        const data = await response.json();
+        console.log("body recd is -->", data);
+      } catch (e) {
+        console.log("couldnt make api call", e);
+      }
+    }, 300);
+
+    timeoutReference.current = newTimeoutRef;
+  }, [makeAPIRequest]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <div style={{ display: "flex", gap: "2rem" }}>
+        <input
+          style={{ width: "24rem" }}
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          type="text"
+          placeholder="Enter URL"
+        />
+        <button
+          onClick={() => {
+            setMakeAPIRequest((prev) => prev + 1);
+          }}
+        >
+          Make Request
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

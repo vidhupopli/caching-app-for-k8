@@ -1,0 +1,39 @@
+services:
+  caching-service-dev:
+    image: caching-service:dev-latest
+    build:
+      context: ./caching-service
+      dockerfile: dockerfile
+    container_name: c-caching-service-dev
+
+  api-service-dev:
+    image: api-service:dev-latest
+    build:
+      context: ./api-service
+      dockerfile: dockerfile.dev
+    container_name: c-api-service-dev
+    ports:
+      - "3000:8080"
+    environment:
+      - REDIS_HOST=c-caching-service-dev
+    depends_on:
+      - caching-service-dev
+    volumes:
+      - api_nm:/app/node_modules
+
+  frontend-service:
+    image: frontend-service:dev-latest
+    build:
+      context: ./frontend-service
+      dockerfile: dockerfile.dev
+    container_name: c-fe-service-dev
+    environment:
+      - API_SERVICE_HOST=c-api-service-dev
+    ports:
+      - "3001:5173"
+    volumes:
+      - fe_nm:/app/node_modules
+
+volumes:
+  api_nm:
+  fe_nm:

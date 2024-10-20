@@ -16,7 +16,8 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.7.6",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "ioredis": "^5.4.1"
   },
   "devDependencies": {
     "tsc-watch": "^6.2.0",

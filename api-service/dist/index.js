@@ -1,10 +1,67 @@
 import express from "express";
+import { Redis } from "ioredis";
 import "dotenv/config";
 const serverPort = process.env.SERVER_PORT;
 const app = express();
+let redis = null;
 app.get("/", (req, res, next) => {
-    res.send("Jai Gurudev | Narayan Narayan");
+    res.json({ msg: "Jai Gurudev" });
 });
-app.listen(serverPort, () => {
-    console.log("started server @ port: ", serverPort);
+app.get("/posts", async (req, res, next) => {
+    try {
+        if (redis) {
+            const postsData = await redis.get("posts");
+            if (postsData) {
+                res.json(JSON.parse(postsData));
+                return;
+            }
+        }
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+        const data = await response.json();
+        if (redis) {
+            await redis.setex("posts", 3600, JSON.stringify(data));
+        }
+        res.json(data);
+    }
+    catch (err) {
+        res.status(400).json({ msg: "redis not found" });
+    }
 });
+app.get("/posts/:id", async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        if (redis) {
+            const singlePostData = await redis.get(`post-${id}`);
+            if (singlePostData) {
+                res.json(JSON.parse(singlePostData));
+                return;
+            }
+        }
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts" + "/" + id);
+        const dataOfOnePost = await response.json();
+        if (redis) {
+            await redis.setex(`post-${id}`, 3600, JSON.stringify(dataOfOnePost));
+        }
+        res.json(dataOfOnePost);
+    }
+    catch (err) {
+        res.status(500).json({ msg: "something went wrong" });
+    }
+});
+async function init() {
+    try {
+        // Connect with redis
+        redis = new Redis({
+            host: "localhost",
+            port: 6379,
+        });
+        // Start server
+        app.listen(serverPort, () => {
+            console.log("started server @ port: ", serverPort);
+        });
+    }
+    catch (err) {
+        console.log("some error ocurred");
+    }
+}
+init();

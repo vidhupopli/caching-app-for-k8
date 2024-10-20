@@ -1,8 +1,7 @@
 import express from "express";
 import { Redis } from "ioredis";
 
-import "dotenv/config";
-const serverPort = process.env.SERVER_PORT;
+const serverPort = 8080;
 
 const app = express();
 let redis: null | Redis = null;
@@ -66,13 +65,13 @@ async function init() {
   try {
     // Connect with redis
     redis = new Redis({
-      host: "localhost",
+      host: process.env.REDIS_HOST,
       port: 6379,
     });
 
     // Start server
     app.listen(serverPort, () => {
-      console.log("started server @ port: ", serverPort);
+      console.log("started api service @ port: ", serverPort);
     });
   } catch (err) {
     console.log("some error ocurred");

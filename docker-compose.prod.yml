@@ -1,13 +1,13 @@
 services:
   caching-service-prod:
-    image: caching-service:prod-latest
+    image: vidhup/cachingapp_cachingservice:prod-latest
     build:
       context: ./caching-service
       dockerfile: dockerfile
     container_name: c-caching-service-prod
 
   api-service-prod:
-    image: api-service:prod-latest
+    image: vidhup/cachingapp_apiservice:prod-latest
     build:
       context: ./api-service
       dockerfile: dockerfile.prod
@@ -18,7 +18,7 @@ services:
       - caching-service-prod
 
   frontend-service-prod:
-    image: frontend-service:prod-latest
+    image: vidhup/cachingapp_feservice:prod-latest
     build:
       context: ./frontend-service
       dockerfile: dockerfile.prod

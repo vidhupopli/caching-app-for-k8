@@ -15,10 +15,12 @@
   "dependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^22.7.6",
     "cors": "^2.8.5",
     "express": "^4.21.1",
-    "ioredis": "^5.4.1"
+    "ioredis": "^5.4.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "tsc-watch": "^6.2.0",

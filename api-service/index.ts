@@ -1,6 +1,7 @@
 import express from "express";
 import { Redis } from "ioredis";
 import cors from "cors";
+import morgan from "morgan";
 
 const serverPort = 8080;
 
@@ -8,6 +9,7 @@ const app = express();
 let redis: null | Redis = null;
 
 app.use(cors({ origin: "*" }));
+app.use(morgan("short"));
 
 app.get("/", (req, res, next) => {
   res.json({ msg: "Jai Gurudev" });

@@ -1,0 +1,33 @@
+services:
+  caching-service-prod:
+    image: caching-service:prod-latest
+    build:
+      context: ./caching-service
+      dockerfile: dockerfile
+    container_name: c-caching-service-prod
+
+  api-service-prod:
+    image: api-service:prod-latest
+    build:
+      context: ./api-service
+      dockerfile: dockerfile.prod
+    container_name: c-api-service-prod
+    environment:
+      - REDIS_HOST=c-caching-service-prod
+    depends_on:
+      - caching-service-prod
+
+  frontend-service-prod:
+    image: frontend-service:prod-latest
+    build:
+      context: ./frontend-service
+      dockerfile: dockerfile.prod
+    container_name: c-fe-service-prod
+    ports:
+      - "80:80"
+    depends_on:
+      - api-service-prod
+
+volumes:
+  api_nm:
+  fe_nm:

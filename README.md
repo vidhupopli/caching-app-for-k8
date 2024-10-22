@@ -2,9 +2,13 @@
 
 Authored by: Vidhu Popli
 
-## Architecture for running in kubernetes environment
+## Running in kubernetes environment
 
-## Architecture for running in docker environment
+1. Create all three deployements using: `kubectl create -f filename`
+2. Create all three services using: `kubectl create -f filename`
+3. Expose fe service through minikube: `minikube service feservicenamehere`
+
+## Running in docker environment
 
 ### Docker env for PROD
 

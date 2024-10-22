@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: c-api-service-prod
+  labels:
+    domain: infra
+    purpose: inframgmt
+    app: cachingapp
+spec:
+  type: ClusterIP
+  selector:
+    domain: backend
+    purpose: api-layer
+    app: cachingapp
+  ports:
+    - port: 8080
+      targetPort: 8080

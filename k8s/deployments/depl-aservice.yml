@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: depl-aservice
+  labels:
+    domain: infra
+    purpose: inframgmt
+    app: cachingapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      domain: backend
+      purpose: api-layer
+      app: cachingapp
+  template:
+    metadata:
+      name: pod-cservice
+      labels:
+        domain: backend
+        purpose: api-layer
+        app: cachingapp
+    spec:
+      containers:
+        - image: vidhup/cachingapp_apiservice:prod-latest
+          name: cont-apiservice
+          env:
+            - name: REDIS_HOST
+              value: serv-cservice
+# So the api service running inside the container here is listening for port: 8080

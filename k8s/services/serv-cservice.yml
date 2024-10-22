@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: serv-cservice
+  labels:
+    domain: infra
+    purpose: inframgmt
+    app: cachingapp
+spec:
+  type: ClusterIP
+  selector:
+    domain: backend
+    purpose: redis-cache
+    app: cachingapp
+  ports:
+    - port: 6379
+      targetPort: 6379

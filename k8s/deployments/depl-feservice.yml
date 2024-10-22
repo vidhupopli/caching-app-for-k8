@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: depl-feservice
+  labels:
+    domain: infra
+    purpose: inframgmt
+    app: cachingapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      domain: backend
+      purpose: fe-layer
+      app: cachingapp
+  template:
+    metadata:
+      name: pod-cservice
+      labels:
+        domain: backend
+        purpose: fe-layer
+        app: cachingapp
+    spec:
+      containers:
+        - image: vidhup/cachingapp_feservice:prod-latest
+          name: cont-feservice
+# So the api service running inside the container here is listening for port: 8080

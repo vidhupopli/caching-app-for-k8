@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: depl-cservice
+  labels:
+    domain: infra
+    purpose: inframgmt
+    app: cachingapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      domain: backend
+      purpose: redis-cache
+      app: cachingapp
+  template:
+    metadata:
+      name: pod-cservice
+      labels:
+        domain: backend
+        purpose: redis-cache
+        app: cachingapp
+    spec:
+      containers:
+        - image: vidhup/cachingapp_cachingservice:prod-latest
+          name: cont-cachingservice
+# So the cservice running inside the container here is listening for port: 6379
